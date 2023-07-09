@@ -4,7 +4,7 @@ connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
 channel = connection.channel()
 
 def create_queue(queue_name):
-    channel.queue_declare(queue=queue_name)
+    channel.queue_declare(queue=queue_name, durable=True)
 
 def send_message(queue_name, message):
     channel.basic_publish(exchange='', routing_key=queue_name, body=message)
@@ -15,3 +15,5 @@ def receive_message(queue_name):
         return body.decode()
     else:
         return None
+def delete_queue(queue_name):
+    channel.queue_delete(queue=queue_name)
